@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: conver-temp 
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: conver-app
+  template:
+    metadata:
+      labels:
+        app: conver-app
+    spec:
+      containers:
+        - name: conversao
+          image: vinny6202/conversao-temperatura:v2
+          ports:
+          - name: http
+            containerPort: 8080
+            protocol: TCP
+            
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: conver-temp
+spec:
+  selector:
+    app: conver-app
+  type: NodePort
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+    protocol: TCP
+    nodePort: 30000
+
+
